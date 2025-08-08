@@ -59,7 +59,7 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
 
         if (Config.IsShopItem?.Value ?? data.isShopItem)
         {
-            // TODO Register our own shop item
+            // TODO we probably need to duplicate the items whenever we do something like this?
             CRLib.RegisterShopItem(Item, Config.Cost?.Value ?? data.cost, ShopItemPreset.OrderRequestNode, ShopItemPreset.OrderedItemNode, ShopItemPreset.ItemInfoNode);
         }
 

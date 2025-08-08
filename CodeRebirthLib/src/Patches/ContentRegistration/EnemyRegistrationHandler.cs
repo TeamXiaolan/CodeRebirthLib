@@ -78,6 +78,7 @@ static class EnemyRegistrationHandler
                 };
 
                 // todo: xu you talked about wanting to register one enemy as daytime/outside/inside but this only registers as one?
+                // todo: I think we gotta duplicate the SO's cuz of the daytime outside fields
                 if (enemy.Value.isDaytimeEnemy && enemy.Value.isOutsideEnemy)
                 {
                     level.DaytimeEnemies.Add(spawnDef);

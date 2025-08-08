@@ -42,7 +42,11 @@ public class CRUnlockableDefinition : CRContentDefinition<UnlockableData>
 
         if (Config.IsProgressive?.Value ?? data.isProgressive)
         {
-            if (!ProgressiveDenyNode) ProgressiveDenyNode = CreateDefaultProgressiveDenyNode();
+            if (!ProgressiveDenyNode)
+            {
+                ProgressiveDenyNode = CreateDefaultProgressiveDenyNode();
+            }
+
             CodeRebirthLibPlugin.ExtendedLogging($"Creating ProgressiveUnlockData for {UnlockableItem.unlockableName}");
             ProgressiveData = new ProgressiveUnlockData(this);
         }

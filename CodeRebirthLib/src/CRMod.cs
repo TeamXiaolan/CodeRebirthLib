@@ -172,6 +172,7 @@ public class CRMod
     {
         return GetRegistryByName<CRItemDefinition>(CRItemDefinition.REGISTRY_ID);
     }
+
     [Obsolete] // todo: move to LethalContent
     public static IEnumerable<CRItemDefinition> AllItems()
     {
@@ -193,6 +194,7 @@ public class CRMod
     {
         return GetRegistryByName<CRUnlockableDefinition>(CRUnlockableDefinition.REGISTRY_ID);
     }
+
     [Obsolete] // todo: move to LethalContent
     public static IEnumerable<CRUnlockableDefinition> AllUnlockables()
     {
@@ -208,9 +210,16 @@ public class CRMod
     {
         return AllMods.SelectMany(mod => mod.AchievementRegistry());
     }
+
     public CRRegistry<CRAdditionalTilesDefinition> AdditionalTilesRegistry()
     {
         return GetRegistryByName<CRAdditionalTilesDefinition>(CRAdditionalTilesDefinition.REGISTRY_ID);
+    }
+
+    // todo: Obsolete and move to LethalContent??
+    public static IEnumerable<CRAdditionalTilesDefinition> AllAdditionalTiles()
+    {
+        return AllMods.SelectMany(mod => mod.AdditionalTilesRegistry());
     }
 
     public static event Action<CRAchievementBaseDefinition> OnAchievementUnlocked;

@@ -24,16 +24,18 @@ public class CRMapObjectDefinition : CRContentDefinition<MapObjectData>
 
     [field: FormerlySerializedAs("alignWithTerrain")]
     [field: SerializeField]
-    public bool AlignWithTerrain { get; private set; }
+    public bool AlignWithTerrain { get; private set; } // todo: migrate to outsidemapobjectsettings
 
     [field: SerializeField]
-    public SpawnableMapObject InsideMapObjectSettings { get; private set; } = new();
+    public InsideMapObjectSettings InsideMapObjectSettings { get; private set; }
+    [field: SerializeField]
+    public OutsideMapObjectSettings OutsideMapObjectSettings { get; private set; }
 
-    public MapObjectConfig Config { get; private set; }
     public MapObjectSpawnMechanics? InsideSpawnMechanics { get; private set; }
     public MapObjectSpawnMechanics? OutsideSpawnMechanics { get; private set; }
+    public MapObjectConfig Config { get; private set; }
 
-    public bool HasNetworkObject { get; private set; }
+    public bool HasNetworkObject { get; private set; }  // todo: migrate to outsidemapobjectsettings?
 
     protected override string EntityNameReference => MapObjectName;
 
