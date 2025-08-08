@@ -9,7 +9,7 @@ public class CRUnlockableReference(string name) : CRContentReference<CRUnlockabl
 
     public static implicit operator CRUnlockableDefinition?(CRUnlockableReference reference)
     {
-        if (CRMod.AllUnlockables().TryGetFromUnlockableName(reference.entityName, out var obj))
+        if (LethalContent.Unlockables.CRLib.TryGetFromUnlockableName(reference.entityName, out var obj))
         {
             return obj;
         }

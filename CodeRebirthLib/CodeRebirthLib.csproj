@@ -44,7 +44,6 @@
     
     <!-- Other mod dependencies -->
     <ItemGroup>
-        <PackageReference Include="Evaisa.LethalLib" Publicize="true" Version="1.*" />
         <PackageReference Include="mrov.WeatherRegistry" Publicize="true" Version="*" PrivateAssets="all" />
         <PackageReference Include="mrov.MrovLib" Publicize="true" Version="*" PrivateAssets="all" />
 

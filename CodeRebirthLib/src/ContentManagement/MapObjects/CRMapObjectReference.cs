@@ -10,7 +10,7 @@ public class CRMapObjectReference(string name) : CRContentReference<CRMapObjectD
 
     public static implicit operator CRMapObjectDefinition?(CRMapObjectReference reference)
     {
-        if (CRMod.AllMapObjects().TryGetFromMapObjectName(reference.entityName, out var obj))
+        if (LethalContent.MapObjects.CRLib.TryGetFromMapObjectName(reference.entityName, out var obj))
         {
             return obj;
         }

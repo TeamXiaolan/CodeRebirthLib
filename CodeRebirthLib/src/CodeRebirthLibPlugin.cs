@@ -10,6 +10,7 @@ using CodeRebirthLib.MiscScriptManagement;
 using CodeRebirthLib.MiscScripts;
 using CodeRebirthLib.ModCompats;
 using CodeRebirthLib.Patches;
+using CodeRebirthLib.Patches.ContentRegistration;
 using CodeRebirthLib.Util;
 using CodeRebirthLib.Util.Pathfinding;
 using PathfindingLib;
@@ -17,7 +18,6 @@ using UnityEngine;
 
 namespace CodeRebirthLib;
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-[BepInDependency(LethalLib.Plugin.ModGUID)]
 [BepInDependency(WeatherRegistry.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency(LethalConfig.PluginInfo.Guid, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency(LethalQuantities.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
@@ -36,14 +36,16 @@ class CodeRebirthLibPlugin : BaseUnityPlugin
         CodeRebirthLibConfig.Bind(ConfigManager);
         NetcodePatcher();
         CollectVanillaContentPatch.Init();
-        TileInjectionPatch.Init();
 
+        AdditionalTilesRegistrationHandler.Init();
         ItemRegistrationHandler.Init();
-        CRMapObjectsPatch.Init();
+        EnemyRegistrationHandler.Init();
+        MapObjectRegistrationHandler.Init();
+        UnlockableRegistrationHandler.Init();
+
         GameNetworkManagerPatch.Init();
         EnemyAIPatch.Init();
         StartOfRoundPatch.Init();
-        TerminalPatch.Init();
         DeleteFileButtonPatch.Init();
         MenuManagerPatch.Init();
 

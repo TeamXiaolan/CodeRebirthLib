@@ -5,7 +5,7 @@ using CodeRebirthLib.ContentManagement.Enemies;
 using CodeRebirthLib.ContentManagement.Levels;
 using CodeRebirthLib.Data;
 
-namespace CodeRebirthLib.Patches;
+namespace CodeRebirthLib.Patches.ContentRegistration;
 
 static class EnemyRegistrationHandler
 {

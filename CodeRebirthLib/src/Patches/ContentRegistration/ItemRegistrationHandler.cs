@@ -4,7 +4,7 @@ using CodeRebirthLib.ConfigManagement;
 using CodeRebirthLib.Data;
 using UnityEngine;
 
-namespace CodeRebirthLib.Patches;
+namespace CodeRebirthLib.Patches.ContentRegistration;
 static class ItemRegistrationHandler
 {
     private static readonly List<Item> _allNewItems = [];
@@ -21,11 +21,11 @@ static class ItemRegistrationHandler
 
     private static void Terminal_Awake(On.Terminal.orig_Awake orig, Terminal self)
     {
-        TerminalKeyword buyKeyword = self.terminalNodes.allKeywords.First(keyword => keyword.word == "buy");
         TerminalKeyword infoKeyword = self.terminalNodes.allKeywords.First(keyword => keyword.word == "info");
+        TerminalKeyword buyKeyword = self.terminalNodes.allKeywords.First(keyword => keyword.word == "buy");
         TerminalKeyword confirmPurchaseKeyword = self.terminalNodes.allKeywords.First(keyword2 => keyword2.word == "confirm");
         TerminalKeyword denyPurchaseKeyword = self.terminalNodes.allKeywords.First(keyword2 => keyword2.word == "deny");
-        TerminalNode cancelPurchaseNode = buyKeyword.compatibleNouns[0].result.terminalOptions[1].result;
+        TerminalNode cancelPurchaseNode = buyKeyword.compatibleNouns[0].result.terminalOptions[1].result; // TODO, I use these a couple times, maybe i should have em stored somewhere in LethalContent?
 
         foreach (ShopItemRegisterationSettings shopItemSettings in _shopItemsToInject)
         {

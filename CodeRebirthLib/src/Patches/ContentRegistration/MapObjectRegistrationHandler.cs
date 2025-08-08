@@ -6,11 +6,11 @@ using CodeRebirthLib.Extensions;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace CodeRebirthLib.Patches;
+namespace CodeRebirthLib.Patches.ContentRegistration;
 
-static class CRMapObjectsPatch
+static class MapObjectRegistrationHandler
 {
-    private static List<CRMapObjectDefinition> _registeredInsideMapObjects => CRMod.AllMapObjects().Where(x => x.InsideSpawnMechanics != null).ToList();
+    private static List<CRMapObjectDefinition> _registeredInsideMapObjects => LethalContent.MapObjects.CRLib.Where(x => x.InsideSpawnMechanics != null).ToList();
     private static bool _alreadyAddedInsideMapObjects = false;
 
     internal static void Init()

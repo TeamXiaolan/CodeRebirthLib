@@ -5,15 +5,13 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using CodeRebirthLib.ConfigManagement;
-using CodeRebirthLib.ConfigManagement.Weights;
 using CodeRebirthLib.ContentManagement;
-using CodeRebirthLib.ContentManagement.Enemies;
 using CodeRebirthLib.Data;
 using CodeRebirthLib.Patches;
+using CodeRebirthLib.Patches.ContentRegistration;
 using CodeRebirthLib.Util;
 using CodeRebirthLib.Util.INetworkSerializables;
 using DunGen;
-using Steamworks.Data;
 using UnityEngine;
 
 namespace CodeRebirthLib;
@@ -73,7 +71,7 @@ public static class CRLib
         if (!prefab)
             throw new ArgumentNullException(nameof(prefab));
 
-        TileInjectionPatch.tilesToFixSockets.Add(prefab);
+        AdditionalTilesRegistrationHandler.tilesToFixSockets.Add(prefab); // TODO?
     }
 
     internal static CRMod RegisterNoCodeMod(CRModInformation modInfo, AssetBundle mainBundle, string basePath)
@@ -105,7 +103,21 @@ public static class CRLib
     /// <remarks>You should also call <see cref="FixDoorwaySockets"/> on your tile prefabs</remarks>
     public static void RegisterTileSetForArchetype(string archetypeName, TileSet tileSet, bool isBranchCap = false)
     {
-        TileInjectionPatch.AddTileSetForDungeon(archetypeName, new TileInjectionPatch.TileInjectionSettings(tileSet, isBranchCap)); // i want to keep a lot of the public facing methods in the CRLib class
+        AdditionalTilesRegistrationHandler.AddTileSetForDungeon(archetypeName, new AdditionalTilesRegistrationHandler.TileInjectionSettings(tileSet, isBranchCap)); // i want to keep a lot of the public facing methods in the CRLib class // TODO?
+    }
+
+    public static void RegisterPlaceableUnlockableItem(UnlockableItem unlockableItem, int cost, bool isShipUpgrade, bool isDecor)
+    {
+        StoreType storeType = (StoreType)(-1);
+        if (isDecor)
+        {
+            storeType |= StoreType.Decor;
+        }
+        if (isShipUpgrade)
+        {
+            storeType |= StoreType.ShipUpgrade;
+        }
+        UnlockableRegistrationHandler.AddUnlockableToShop(new UnlockableItemRegistrationSettings(unlockableItem, cost, storeType));
     }
 
     public static void RegisterItem(Item item)

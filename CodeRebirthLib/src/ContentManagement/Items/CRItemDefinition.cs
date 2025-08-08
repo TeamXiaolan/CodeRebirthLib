@@ -32,7 +32,7 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
     {
         SpawnWeights ??= ScriptableObject.CreateInstance<SpawnWeightsPreset>();
 
-        BoundedRange itemWorth = new BoundedRange(Item.minValue * 0.4f, Item.maxValue * 0.4f);
+        BoundedRange itemWorth = new(Item.minValue * 0.4f, Item.maxValue * 0.4f);
         using ConfigContext section = mod.ConfigManager.CreateConfigSectionForBundleData(AssetBundleData);
         Config = CreateItemConfig(section, data, itemWorth, SpawnWeights, Item.itemName);
 

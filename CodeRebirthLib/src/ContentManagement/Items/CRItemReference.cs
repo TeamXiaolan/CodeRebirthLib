@@ -9,7 +9,7 @@ public class CRItemReference(string name) : CRContentReference<CRItemDefinition>
 
     public static implicit operator CRItemDefinition?(CRItemReference reference)
     {
-        if (CRMod.AllItems().TryGetFromItemName(reference.entityName, out var obj))
+        if (LethalContent.Items.CRLib.TryGetFromItemName(reference.entityName, out var obj))
         {
             return obj;
         }

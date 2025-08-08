@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using CodeRebirthLib.ContentManagement;
 using DunGen;
-using IL.DunGen.Graph;
 using UnityEngine;
 using DungeonFlow = DunGen.Graph.DungeonFlow;
 
-namespace CodeRebirthLib.Patches;
-static class TileInjectionPatch
+namespace CodeRebirthLib.Patches.ContentRegistration;
+
+static class AdditionalTilesRegistrationHandler
 {
     internal class TileInjectionSettings(TileSet set, bool isBranchCap)
     {

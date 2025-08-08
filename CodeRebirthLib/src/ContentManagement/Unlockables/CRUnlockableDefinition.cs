@@ -2,7 +2,6 @@
 using System.Linq;
 using CodeRebirthLib.ConfigManagement;
 using CodeRebirthLib.ContentManagement.Unlockables.Progressive;
-using LethalLib.Modules;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -30,15 +29,7 @@ public class CRUnlockableDefinition : CRContentDefinition<UnlockableData>
         using ConfigContext section = mod.ConfigManager.CreateConfigSectionForBundleData(AssetBundleData);
         Config = CreateUnlockableConfig(section, data, UnlockableItem.unlockableName);
 
-        if (Config.IsShipUpgrade.Value)
-        {
-            LethalLib.Modules.Unlockables.RegisterUnlockable(UnlockableItem, Config.Cost.Value, StoreType.ShipUpgrade);
-        }
-
-        if (Config.IsDecor.Value)
-        {
-            LethalLib.Modules.Unlockables.RegisterUnlockable(UnlockableItem, Config.Cost.Value, StoreType.Decor);
-        }
+        CRLib.RegisterPlaceableUnlockableItem(UnlockableItem, Config.Cost.Value, Config.IsShipUpgrade.Value, Config.IsDecor.Value); // Placeable because i dont support suits yet, but that'd be fun to do too!
 
         if (Config.IsProgressive?.Value ?? data.isProgressive)
         {
