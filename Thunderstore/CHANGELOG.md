@@ -1,6 +1,16 @@
-# v0.9.9
+# v0.10.0
 
-- Touched up code all over a bit more, achievements are mostly finished in practise with only UI left.
+- A bit of an overhaul to the codebase.
+- Added `LethalContent`
+  - Contains all the Vanilla, All and CRLib content added into the game of specific genres CRLib supports, such as Dungeons, Items, Enemies, Unlockables, MapObjects.
+- Finished Achievements.
+  - Added the following Achievements:
+  - Stat Achievements, completed by doing something an x amount of times.
+  - Discovery Achievements, completed by doing a list of different things.
+  - Instant Achievements, completed by doing something.
+  - Parent Achievements, completed by completing a list of achievements.
+  - Code not needed for any of this most of the time.
+- Added a way to add tiles to existing interiors, vanilla or modded, code not needed.
 - Added a component that allows you to run events based on trying to complete achievements, an event on completing an achievement, and incrementing achievement progress.
 
 ## v0.9.8

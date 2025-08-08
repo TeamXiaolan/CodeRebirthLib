@@ -45,10 +45,7 @@ public class CREnemyDefinition : CRContentDefinition<EnemyData>
 
     public override void Register(CRMod mod, EnemyData data)
     {
-        if (SpawnWeights == null)
-        {
-            SpawnWeights = ScriptableObject.CreateInstance<SpawnWeightsPreset>();
-        }
+        SpawnWeights ??= ScriptableObject.CreateInstance<SpawnWeightsPreset>();
 
         using ConfigContext section = mod.ConfigManager.CreateConfigSectionForBundleData(AssetBundleData);
         Config = CreateEnemyConfig(section, data, SpawnWeights, EnemyType.enemyName);

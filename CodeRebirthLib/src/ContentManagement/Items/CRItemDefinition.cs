@@ -22,7 +22,7 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
     public SpawnWeightsPreset SpawnWeights { get; private set; }
 
     [field: SerializeField]
-    public ShopItemPreset ShopItemPreset { get; private set; }
+    public ShopItemPreset ShopItemPreset { get; private set; } = new();
 
     public ItemConfig Config { get; private set; }
 
@@ -30,10 +30,7 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
 
     public override void Register(CRMod mod, ItemData data)
     {
-        if (SpawnWeights == null)
-        {
-            SpawnWeights = ScriptableObject.CreateInstance<SpawnWeightsPreset>();
-        }
+        SpawnWeights ??= ScriptableObject.CreateInstance<SpawnWeightsPreset>();
 
         BoundedRange itemWorth = new BoundedRange(Item.minValue * 0.4f, Item.maxValue * 0.4f);
         using ConfigContext section = mod.ConfigManager.CreateConfigSectionForBundleData(AssetBundleData);

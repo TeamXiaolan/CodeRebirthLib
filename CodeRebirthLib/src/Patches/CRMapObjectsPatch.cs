@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CodeRebirthLib.ContentManagement;
 using CodeRebirthLib.ContentManagement.MapObjects;
 using CodeRebirthLib.Extensions;
 using Unity.Netcode;
@@ -49,7 +50,7 @@ static class CRMapObjectsPatch
             spawnWithBackFlushAgainstWall = registeredMapObject.InsideMapObjectSettings.spawnWithBackFlushAgainstWall,
             requireDistanceBetweenSpawns = registeredMapObject.InsideMapObjectSettings.requireDistanceBetweenSpawns,
             disallowSpawningNearEntrances = registeredMapObject.InsideMapObjectSettings.disallowSpawningNearEntrances,
-            numberToSpawn = registeredMapObject.InsideSpawnMechanics!.CurveFunction(level) // this works right?
+            numberToSpawn = curve
         };
 
         level.spawnableMapObjects = level.spawnableMapObjects.Append(spawnableMapObject).ToArray();
@@ -74,7 +75,7 @@ static class CRMapObjectsPatch
         orig(self);
     }
 
-    internal static List<CRMapObjectDefinition> registeredOutsideObjects => CRMod.AllMapObjects().Where(x => x.OutsideSpawnMechanics != null).ToList();
+    internal static List<CRMapObjectDefinition> registeredOutsideObjects => LethalContent.MapObjects.CRLib.Where(x => x.OutsideSpawnMechanics != null).ToList();
 
     private static void RoundManager_SpawnOutsideHazards(On.RoundManager.orig_SpawnOutsideHazards orig, RoundManager self)
     {

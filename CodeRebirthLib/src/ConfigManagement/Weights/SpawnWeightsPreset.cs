@@ -34,7 +34,7 @@ public class SpawnWeightsPreset : ScriptableObject, IWeighted
     public int GetWeight()
     {
         float weight = 0;
-        SpawnWeightsTransformers.OrderBy(x => x.GetOperation() == "+").ToList();
+        SpawnWeightsTransformers.OrderBy(x => x.GetOperation() == "+" || x.GetOperation() == "-").ToList();
         foreach (var weightTransformer in SpawnWeightsTransformers)
         {
             weight = weightTransformer.GetNewWeight(weight);

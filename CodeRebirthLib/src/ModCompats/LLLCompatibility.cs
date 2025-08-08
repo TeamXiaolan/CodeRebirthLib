@@ -18,7 +18,7 @@ static class LLLCompatibility
         if (extendedLevel == null) return false;
         foreach (var curve in curvesByCustomLevel)
         {
-            foreach (ContentTag? tag in extendedLevel.ContentTags)
+            foreach (ContentTag tag in extendedLevel.ContentTags)
             {
                 if (tag.contentTagName.ToLowerInvariant() == curve.Key)
                 {

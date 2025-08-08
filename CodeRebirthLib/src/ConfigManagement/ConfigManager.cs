@@ -64,7 +64,8 @@ public class ConfigManager(ConfigFile file)
         {
             string[] entryParts = entry.Split('-').Select(s => s.Trim()).ToArray();
 
-            if (entryParts.Length != 2) continue;
+            if (entryParts.Length != 2)
+                continue;
 
             string name = entryParts[0].ToLowerInvariant();
 

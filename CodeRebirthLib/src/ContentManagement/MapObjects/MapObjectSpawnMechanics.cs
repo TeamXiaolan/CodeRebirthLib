@@ -8,7 +8,6 @@ namespace CodeRebirthLib.ContentManagement.MapObjects;
 
 public class MapObjectSpawnMechanics
 {
-
     public MapObjectSpawnMechanics(string configString)
     {
         Dictionary<string, string> spawnRateByMoonName = ConfigManager.ParseLevelNameWithCurves(configString);
@@ -50,13 +49,12 @@ public class MapObjectSpawnMechanics
         string actualLevelName = ConfigManager.GetLLLNameOfLevel(level.name);
         bool isVanilla = level.IsVanilla();
         CodeRebirthLibPlugin.ExtendedLogging($"Actual level name: {actualLevelName} | isVanilla: {isVanilla}");
-        if (isVanilla && CurvesByMoonName.TryGetValue(actualLevelName, out AnimationCurve curve))
+        if (CurvesByMoonName.TryGetValue(actualLevelName, out AnimationCurve curve))
         {
             return curve;
         }
         if (LLLCompatibility.Enabled && LLLCompatibility.TryGetCurveDictAndLevelTag(CurvesByMoonName, level, out string tagName) && CurvesByMoonName.TryGetValue(tagName, out curve))
         {
-            CodeRebirthLibPlugin.ExtendedLogging("registering a mapobject through a tag, nice.");
             return curve;
         }
         if (isVanilla && VanillaCurve != null)

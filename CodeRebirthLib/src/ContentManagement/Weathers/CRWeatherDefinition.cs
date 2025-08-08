@@ -46,15 +46,17 @@ public class CRWeatherDefinition : CRContentDefinition<WeatherData>
             SunAnimatorBool = Weather.Effect.SunAnimatorBool,
         };
 
-        Weather weather = new($"{Weather.Name}", newImprovedWeatherEffect);
-        weather.Color = Weather.Color;
-        weather.Config = new RegistryWeatherConfig
+        Weather weather = new($"{Weather.Name}", newImprovedWeatherEffect)
         {
-            DefaultWeight = new IntegerConfigHandler(data.spawnWeight),
-            ScrapValueMultiplier = new FloatConfigHandler(data.scrapValueMultiplier),
-            ScrapAmountMultiplier = new FloatConfigHandler(data.scrapMultiplier),
-            FilteringOption = new BooleanConfigHandler(!data.isExclude, data.createExcludeConfig),
-            LevelFilters = new LevelListConfigHandler(data.excludeOrIncludeList),
+            Color = Weather.Color,
+            Config = new RegistryWeatherConfig
+            {
+                DefaultWeight = new IntegerConfigHandler(data.spawnWeight),
+                ScrapValueMultiplier = new FloatConfigHandler(data.scrapValueMultiplier),
+                ScrapAmountMultiplier = new FloatConfigHandler(data.scrapMultiplier),
+                FilteringOption = new BooleanConfigHandler(!data.isExclude, data.createExcludeConfig),
+                LevelFilters = new LevelListConfigHandler(data.excludeOrIncludeList),
+            }
         };
 
         this.Weather = weather;
