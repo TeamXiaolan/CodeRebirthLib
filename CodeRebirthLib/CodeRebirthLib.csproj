@@ -80,6 +80,9 @@
         <Reference Include="MMHOOK_BepInEx.Preloader">
             <HintPath>deps\MMHOOK_BepInEx.Preloader.dll</HintPath>
         </Reference>
+        <Reference Include="MMHOOK_imabatby.lethallevelloader">
+            <HintPath>deps\MMHOOK_imabatby.lethallevelloader.dll</HintPath>
+        </Reference>
       <Reference Include="PathfindingLib">
         <HintPath>deps\PathfindingLib.dll</HintPath>
       </Reference>
