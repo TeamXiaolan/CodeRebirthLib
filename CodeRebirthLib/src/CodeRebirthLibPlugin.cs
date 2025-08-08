@@ -62,6 +62,11 @@ class CodeRebirthLibPlugin : BaseUnityPlugin
             LethalQuantitiesCompatibility.Init();
         }
 
+        if (LLLCompatibility.Enabled)
+        {
+            LLLCompatibility.Init();
+        }
+
         ExtendedTOML.Init();
 
         Main = new MainAssets(CRLib.LoadBundle(Assembly.GetExecutingAssembly(), "coderebirthlibmain"));
