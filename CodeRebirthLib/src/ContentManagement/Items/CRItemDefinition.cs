@@ -21,9 +21,8 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
     [field: SerializeField]
     public SpawnWeightsPreset SpawnWeights { get; private set; }
 
-    [field: FormerlySerializedAs("terminalNode")]
     [field: SerializeField]
-    public TerminalNode? TerminalNode { get; private set; }
+    public ShopItemPreset ShopItemPreset { get; private set; }
 
     public ItemConfig Config { get; private set; }
 
@@ -61,15 +60,18 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
         if (Config.IsShopItem?.Value ?? data.isShopItem)
         {
             // TODO Register our own shop item
-            LethalLib.Modules.Items.RegisterShopItem(Item, null, null, TerminalNode, Config.Cost?.Value ?? data.cost);
+            CRLib.RegisterShopItem(Item, Config.Cost?.Value ?? data.cost, ShopItemPreset.OrderRequestNode, ShopItemPreset.OrderedItemNode, ShopItemPreset.ItemInfoNode);
+        }
+
+        if (Config.IsScrapItem?.Value ?? data.isScrap)
+        {
+            CRLib.RegisterScrap(Item, "All", SpawnWeights);
         }
 
         if (Config.MoonSpawnWeights != null && Config.InteriorSpawnWeights != null && Config.WeatherSpawnWeights != null)
         {
             SpawnWeights.SetupSpawnWeightsPreset(Config.MoonSpawnWeights.Value, Config.InteriorSpawnWeights.Value, Config.WeatherSpawnWeights.Value);
         }
-
-        CRLib.RegisterScrap(Item, "All", SpawnWeights);
         mod.ItemRegistry().Register(this);
     }
 

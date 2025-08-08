@@ -69,3 +69,6 @@ resharper_space_before_while_parentheses = true
 resharper_trailing_comma_in_multiline_lists = true
 resharper_wrap_list_pattern = chop_if_long
 resharper_wrap_object_and_collection_initializer_style = chop_always
+
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = none

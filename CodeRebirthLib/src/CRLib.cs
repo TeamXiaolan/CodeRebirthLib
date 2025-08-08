@@ -113,6 +113,24 @@ public static class CRLib
         ItemRegistrationHandler.AddItemToAllList(item);
     }
 
+    public static void RegisterShopItem(Item item, int cost)
+    {
+        RegisterShopItem(item, cost, null, null, null);
+    }
+
+    public static void RegisterShopItem(Item item, int cost, TerminalNode? orderRequestNode, TerminalNode? orderedItemNode, TerminalNode? itemInfoNode)
+    {
+        ItemRegistrationHandler.AddItemToShop(new ShopItemRegisterationSettings(item, cost, orderRequestNode, orderedItemNode, itemInfoNode));
+    }
+
+    public static void RegisterScrap(Item item, Dictionary<string, int> levelRarities)
+    {
+        foreach ((string levelName, int rarity) in levelRarities)
+        {
+            RegisterScrap(item, levelName, rarity);
+        }
+    }
+
     public static void RegisterScrap(Item item, string levelName, int rarity)
     {
         RegisterScrap(item, levelName, new SimpleWeightProvider(rarity));
@@ -124,17 +142,12 @@ public static class CRLib
         ItemRegistrationHandler.AddItemForLevel(levelName, new RegistrationSettings<Item>(item, provider));
     }
 
-    public static void RegisterScrap(Item item, Dictionary<string, int> levelRarities)
+    public static void RegisterEnemy(EnemyType enemy, Dictionary<string, int> levelRarities)
     {
         foreach ((string levelName, int rarity) in levelRarities)
         {
-            RegisterScrap(item, levelName, rarity);
+            RegisterEnemy(enemy, levelName, rarity);
         }
-    }
-
-    public static void RegisterShopItem(Item item, int price)
-    {
-        // todo
     }
 
     public static void RegisterEnemy(EnemyType enemy, string levelName, int rarity)
@@ -146,13 +159,5 @@ public static class CRLib
     {
         levelName = ConfigManager.GetLLLNameOfLevel(levelName); // I think this is fine to have here, its either this or we sort of assume that the levelName is already parsed fine by now.
         EnemyRegistrationHandler.AddEnemyForLevel(levelName, new RegistrationSettings<EnemyType>(enemy, provider));
-    }
-
-    public static void RegisterEnemy(EnemyType enemy, Dictionary<string, int> levelRarities)
-    {
-        foreach ((string levelName, int rarity) in levelRarities)
-        {
-            RegisterEnemy(enemy, levelName, rarity);
-        }
     }
 }
