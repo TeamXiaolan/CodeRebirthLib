@@ -9,6 +9,9 @@ public class MoonWeightTransformer : WeightTransformer
 {
     public MoonWeightTransformer(string moonConfig)
     {
+        if (string.IsNullOrEmpty(moonConfig))
+            return;
+
         FromConfigString(moonConfig);
     }
 

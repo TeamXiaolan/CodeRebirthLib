@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CodeRebirthLib.ContentManagement;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class SpawnSyncedCRLibObject : MonoBehaviour
         List<(GameObject objectType, float weight)> spawnableObjectsList = new();
         foreach (var objectTypeWithRarity in objectTypesWithRarity)
         {
-            foreach (var mapObjectDefinition in CRMod.AllMapObjects())
+            foreach (var mapObjectDefinition in LethalContent.MapObjects.CRLib)
             {
                 if (!objectTypeWithRarity.CRLibObjectName.Equals(mapObjectDefinition.MapObjectName, StringComparison.OrdinalIgnoreCase))
                     continue;

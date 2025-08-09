@@ -71,7 +71,7 @@ public static class CRLib
         if (!prefab)
             throw new ArgumentNullException(nameof(prefab));
 
-        AdditionalTilesRegistrationHandler.tilesToFixSockets.Add(prefab); // TODO?
+        AdditionalTilesRegistrationHandler.tilesToFixSockets.Add(prefab); // TODO: make a method for this in the handler instead?
     }
 
     internal static CRMod RegisterNoCodeMod(CRModInformation modInfo, AssetBundle mainBundle, string basePath)

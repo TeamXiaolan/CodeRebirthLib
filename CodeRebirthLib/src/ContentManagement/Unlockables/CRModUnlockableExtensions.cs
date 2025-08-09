@@ -17,7 +17,7 @@ public static class CRModUnlockableExtensions
 
     public static bool TryGetDefinition(this UnlockableItem type, [NotNullWhen(true)] out CRUnlockableDefinition? definition)
     {
-        definition = CRMod.AllUnlockables().FirstOrDefault(it => it.UnlockableItem == type);
+        definition = LethalContent.Unlockables.CRLib.FirstOrDefault(it => it.UnlockableItem == type);
         if (!definition) CodeRebirthLibPlugin.ExtendedLogging($"TryGetDefinition for UnlockableDefinition failed with {type.unlockableName}");
         return definition; // implict cast
     }

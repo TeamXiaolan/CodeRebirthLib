@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CodeRebirthLib.ContentManagement.Achievements;
+using CodeRebirthLib.ContentManagement;
 using CodeRebirthLib.ContentManagement.Unlockables;
 using CodeRebirthLib.ContentManagement.Unlockables.Progressive;
 using CodeRebirthLib.Extensions;
@@ -40,9 +40,9 @@ public class CodeRebirthLibNetworker : NetworkSingleton<CodeRebirthLibNetworker>
         {
             RequestProgressiveUnlockableStatesServerRpc(
                 GameNetworkManager.Instance.localPlayerController,
-                CRMod.AllUnlockables()
+                LethalContent.Unlockables.CRLib
                     .Where(it => it.ProgressiveData != null)
-                    .Select(it => it.ProgressiveData.NetworkID)
+                    .Select(it => it.ProgressiveData!.NetworkID)
                     .ToArray()
             );
         }
@@ -59,10 +59,10 @@ public class CodeRebirthLibNetworker : NetworkSingleton<CodeRebirthLibNetworker>
         for (int i = 0; i < expectedOrder.Length; i++)
         {
             uint unlockableNetworkId = expectedOrder[i];
-            CRUnlockableDefinition? definition = CRMod.AllUnlockables().FirstOrDefault(it => { return it.ProgressiveData != null && it.ProgressiveData.NetworkID == unlockableNetworkId; });
+            CRUnlockableDefinition? definition = LethalContent.Unlockables.CRLib.FirstOrDefault(it => { return it.ProgressiveData != null && it.ProgressiveData.NetworkID == unlockableNetworkId; });
             if (definition)
             {
-                values[i] = definition.ProgressiveData.IsUnlocked;
+                values[i] = definition.ProgressiveData!.IsUnlocked;
                 CodeRebirthLibPlugin.ExtendedLogging($"set values[{i}] = {values[i]}");
             }
             else
@@ -85,7 +85,7 @@ public class CodeRebirthLibNetworker : NetworkSingleton<CodeRebirthLibNetworker>
     [ClientRpc]
     private void ProgressiveUnlockableStateResponseClientRpc(bool[] states, ClientRpcParams rpcParams = default)
     {
-        CRUnlockableDefinition[] definitions = CRMod.AllUnlockables().Where(it => it.ProgressiveData != null).ToArray();
+        CRUnlockableDefinition[] definitions = LethalContent.Unlockables.CRLib.Where(it => it.ProgressiveData != null).ToArray();
         for (int i = 0; i < definitions.Length; i++)
         {
             CRUnlockableDefinition definition = definitions[i];

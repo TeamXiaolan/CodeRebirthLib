@@ -8,6 +8,9 @@ public class InteriorWeightTransformer : WeightTransformer
 {
     public InteriorWeightTransformer(string interiorConfig)
     {
+        if (string.IsNullOrEmpty(interiorConfig))
+            return;
+
         FromConfigString(interiorConfig);
     }
 

@@ -15,7 +15,7 @@ static class AdditionalTilesRegistrationHandler
     }
 
     internal static readonly List<GameObject> tilesToFixSockets = [];
-    static readonly Dictionary<string, List<TileInjectionSettings>> setsToInjectToArchetypes = [];
+    private static readonly Dictionary<string, List<TileInjectionSettings>> setsToInjectToArchetypes = [];
 
     internal static void Init()
     {

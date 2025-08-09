@@ -125,7 +125,9 @@ public class CRMod
         {
             if (string.IsNullOrEmpty(entity.EntityName))
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 CodeRebirthLibPlugin.Logger.LogWarning($"Defaulting to old entity name: {entity.entityName} for comparison, please update your mod to use the new references in ContentContainer.");
+#pragma warning restore CS0618 // Type or member is obsolete
             }
         }
         _allMods.Add(this);
@@ -173,7 +175,7 @@ public class CRMod
         return GetRegistryByName<CRItemDefinition>(CRItemDefinition.REGISTRY_ID);
     }
 
-    [Obsolete] // todo: move to LethalContent
+    [Obsolete("Use LethalContent.Items.CRLib instead.")]
     public static IEnumerable<CRItemDefinition> AllItems()
     {
         return AllMods.SelectMany(mod => mod.ItemRegistry());
@@ -184,7 +186,7 @@ public class CRMod
         return GetRegistryByName<CRMapObjectDefinition>(CRMapObjectDefinition.REGISTRY_ID);
     }
 
-    [Obsolete] // todo: move to LethalContent
+    [Obsolete("Use LethalContent.MapObjects.CRLib instead.")]
     public static IEnumerable<CRMapObjectDefinition> AllMapObjects()
     {
         return AllMods.SelectMany(mod => mod.MapObjectRegistry());
@@ -195,7 +197,7 @@ public class CRMod
         return GetRegistryByName<CRUnlockableDefinition>(CRUnlockableDefinition.REGISTRY_ID);
     }
 
-    [Obsolete] // todo: move to LethalContent
+    [Obsolete("Use LethalContent.Unlockables.CRLib instead.")]
     public static IEnumerable<CRUnlockableDefinition> AllUnlockables()
     {
         return AllMods.SelectMany(mod => mod.UnlockableRegistry());
@@ -205,6 +207,7 @@ public class CRMod
     {
         return GetRegistryByName<CRAchievementBaseDefinition>(CRAchievementBaseDefinition.REGISTRY_ID);
     }
+
     // todo: Obsolete and move to LethalContent??
     public static IEnumerable<CRAchievementBaseDefinition> AllAchievements()
     {
@@ -216,7 +219,7 @@ public class CRMod
         return GetRegistryByName<CRAdditionalTilesDefinition>(CRAdditionalTilesDefinition.REGISTRY_ID);
     }
 
-    // todo: Obsolete and move to LethalContent??
+    [Obsolete("Use LethalContent.Dungeons.CRLib instead.")]
     public static IEnumerable<CRAdditionalTilesDefinition> AllAdditionalTiles()
     {
         return AllMods.SelectMany(mod => mod.AdditionalTilesRegistry());

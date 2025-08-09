@@ -19,19 +19,15 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
     public Item Item { get; private set; }
 
     [field: SerializeField]
-    public SpawnWeightsPreset SpawnWeights { get; private set; }
-
-    [field: SerializeField]
     public ShopItemPreset ShopItemPreset { get; private set; } = new();
 
+    public SpawnWeightsPreset SpawnWeights { get; private set; } = new();
     public ItemConfig Config { get; private set; }
 
     protected override string EntityNameReference => Item.itemName;
 
     public override void Register(CRMod mod, ItemData data)
     {
-        SpawnWeights ??= ScriptableObject.CreateInstance<SpawnWeightsPreset>();
-
         BoundedRange itemWorth = new(Item.minValue * 0.4f, Item.maxValue * 0.4f);
         using ConfigContext section = mod.ConfigManager.CreateConfigSectionForBundleData(AssetBundleData);
         Config = CreateItemConfig(section, data, itemWorth, SpawnWeights, Item.itemName);
@@ -65,10 +61,7 @@ public class CRItemDefinition : CRContentDefinition<ItemData>
             CRLib.RegisterScrap(Item, "All", SpawnWeights);
         }
 
-        if (Config.MoonSpawnWeights != null && Config.InteriorSpawnWeights != null && Config.WeatherSpawnWeights != null)
-        {
-            SpawnWeights.SetupSpawnWeightsPreset(Config.MoonSpawnWeights.Value, Config.InteriorSpawnWeights.Value, Config.WeatherSpawnWeights.Value);
-        }
+        SpawnWeights.SetupSpawnWeightsPreset(Config.MoonSpawnWeights?.Value ?? data.moonSpawnWeights, Config.InteriorSpawnWeights?.Value ?? data.interiorSpawnWeights, Config.WeatherSpawnWeights?.Value ?? data.weatherSpawnWeights);
         mod.ItemRegistry().Register(this);
     }
 

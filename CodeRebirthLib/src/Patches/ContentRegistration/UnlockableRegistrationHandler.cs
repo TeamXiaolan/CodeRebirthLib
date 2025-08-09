@@ -8,7 +8,7 @@ namespace CodeRebirthLib.Patches.ContentRegistration;
 
 static class UnlockableRegistrationHandler
 {
-    static readonly List<UnlockableItemRegistrationSettings> _unlockablesToInject = [];
+    private static readonly List<UnlockableItemRegistrationSettings> _unlockablesToInject = [];
 
     internal static void Init()
     {

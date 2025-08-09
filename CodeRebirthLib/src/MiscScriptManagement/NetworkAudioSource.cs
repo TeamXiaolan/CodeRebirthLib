@@ -8,7 +8,7 @@ namespace CodeRebirthLib.MiscScriptManagement;
 [RequireComponent(typeof(AudioSource))]
 public class NetworkAudioSource : NetworkBehaviour
 {
-    class PlayPacket : INetworkSerializable
+    private class PlayPacket : INetworkSerializable
     {
         public bool HasPoolClipID;
         public int ClipID;
@@ -49,24 +49,24 @@ public class NetworkAudioSource : NetworkBehaviour
     }
 
     [SerializeField]
-    bool _syncClipFromPool, _syncPitch, _syncVolume;
+    private bool _syncClipFromPool, _syncPitch, _syncVolume = false;
 
     [SerializeField]
-    bool _requiresOwnership = true;
+    private bool _requiresOwnership = true;
 
     [SerializeField]
-    AudioClip[] _poolToSync;
+    private AudioClip[] _poolToSync;
 
-    AudioSource _source;
+    private AudioSource _source;
 
-    void Awake()
+    private void Awake()
     {
         _source = GetComponent<AudioSource>();
     }
 
-    void CreateNetworkEvent(AudioClip clip, bool isOneShot)
+    private void CreateNetworkEvent(AudioClip clip, bool isOneShot)
     {
-        PlayPacket packet = new PlayPacket()
+        PlayPacket packet = new()
         {
             CallerID = NetworkManager.LocalClientId,
             IsOneShot = isOneShot
@@ -113,13 +113,13 @@ public class NetworkAudioSource : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void SendPlayPacketServerRPC(PlayPacket packet, ServerRpcParams serverRpcParams = default)
+    private void SendPlayPacketServerRPC(PlayPacket packet, ServerRpcParams serverRpcParams = default)
     {
         ReceivePlayPacketClientRPC(packet, serverRpcParams.Receive.SenderClientId == OwnerClientId);
     }
 
     [ClientRpc]
-    void ReceivePlayPacketClientRPC(PlayPacket packet, bool isFromOwner)
+    private void ReceivePlayPacketClientRPC(PlayPacket packet, bool isFromOwner)
     {
         if (packet.CallerID == NetworkManager.LocalClientId) return;
 
@@ -131,12 +131,12 @@ public class NetworkAudioSource : NetworkBehaviour
         ActOnPlayPacket(packet);
     }
 
-    void ActOnPlayPacket(PlayPacket packet)
+    private void ActOnPlayPacket(PlayPacket packet)
     {
         if (packet.HasPitch) _source.pitch = packet.Pitch;
         if (packet.HasVolume) _source.volume = packet.Volume;
 
-        AudioClip clip = null;
+        AudioClip? clip = null;
         if (packet.HasPoolClipID)
         {
             clip = _poolToSync[packet.ClipID];

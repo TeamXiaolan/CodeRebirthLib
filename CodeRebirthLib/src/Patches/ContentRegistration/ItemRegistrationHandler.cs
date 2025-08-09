@@ -8,8 +8,8 @@ namespace CodeRebirthLib.Patches.ContentRegistration;
 static class ItemRegistrationHandler
 {
     private static readonly List<Item> _allNewItems = [];
-    static readonly Dictionary<string, List<RegistrationSettings<Item>>> _itemsToInject = [];
-    static readonly List<ShopItemRegisterationSettings> _shopItemsToInject = [];
+    private static readonly Dictionary<string, List<RegistrationSettings<Item>>> _itemsToInject = [];
+    private static readonly List<ShopItemRegisterationSettings> _shopItemsToInject = [];
     private static readonly Dictionary<SpawnableItemWithRarity, RegistrationSettings<Item>> _itemSettingsMap = [];
 
     internal static void Init()

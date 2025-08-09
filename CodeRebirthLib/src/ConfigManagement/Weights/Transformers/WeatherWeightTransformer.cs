@@ -9,6 +9,9 @@ public class WeatherWeightTransformer : WeightTransformer
 {
     public WeatherWeightTransformer(string weatherConfig)
     {
+        if (string.IsNullOrEmpty(weatherConfig))
+            return;
+
         FromConfigString(weatherConfig);
     }
     public Dictionary<string, string> MatchingWeathersWithWeightAndOperationDict = new();

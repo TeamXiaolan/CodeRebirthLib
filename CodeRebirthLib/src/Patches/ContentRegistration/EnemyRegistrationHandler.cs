@@ -9,7 +9,7 @@ namespace CodeRebirthLib.Patches.ContentRegistration;
 
 static class EnemyRegistrationHandler
 {
-    static readonly Dictionary<string, List<RegistrationSettings<EnemyType>>> _enemiesToInject = [];
+    private static readonly Dictionary<string, List<RegistrationSettings<EnemyType>>> _enemiesToInject = [];
     private static readonly Dictionary<SpawnableEnemyWithRarity, RegistrationSettings<EnemyType>> _enemySettingsMap = [];
 
     internal static void Init()

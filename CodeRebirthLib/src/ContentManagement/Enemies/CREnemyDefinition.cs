@@ -28,9 +28,6 @@ public class CREnemyDefinition : CRContentDefinition<EnemyData>
     [field: SerializeField]
     public SpawnTable SpawnTable { get; private set; }
 
-    [field: SerializeField]
-    public SpawnWeightsPreset SpawnWeights { get; private set; }
-
     [field: FormerlySerializedAs("terminalNode")]
     [field: SerializeField]
     public TerminalNode? TerminalNode { get; private set; }
@@ -39,14 +36,13 @@ public class CREnemyDefinition : CRContentDefinition<EnemyData>
     [field: SerializeField]
     public TerminalKeyword? TerminalKeyword { get; private set; }
 
+    public SpawnWeightsPreset SpawnWeights { get; private set; } = new();
     public EnemyConfig Config { get; private set; }
 
     protected override string EntityNameReference => EnemyType.enemyName;
 
     public override void Register(CRMod mod, EnemyData data)
     {
-        SpawnWeights ??= ScriptableObject.CreateInstance<SpawnWeightsPreset>();
-
         using ConfigContext section = mod.ConfigManager.CreateConfigSectionForBundleData(AssetBundleData);
         Config = CreateEnemyConfig(section, data, SpawnWeights, EnemyType.enemyName);
 
@@ -54,10 +50,7 @@ public class CREnemyDefinition : CRContentDefinition<EnemyData>
         enemy.MaxCount = Config.MaxSpawnCount.Value;
         enemy.PowerLevel = Config.PowerLevel.Value;
 
-        if (Config.MoonSpawnWeights != null && Config.InteriorSpawnWeights != null && Config.WeatherSpawnWeights != null)
-        {
-            SpawnWeights.SetupSpawnWeightsPreset(Config.MoonSpawnWeights.Value, Config.InteriorSpawnWeights.Value, Config.WeatherSpawnWeights.Value);
-        }
+        SpawnWeights.SetupSpawnWeightsPreset(Config.MoonSpawnWeights?.Value ?? data.moonSpawnWeights, Config.InteriorSpawnWeights?.Value ?? data.interiorSpawnWeights, Config.WeatherSpawnWeights?.Value ?? data.weatherSpawnWeights);
 
         CRLib.RegisterEnemy(EnemyType, "All", SpawnWeights);
         // TODO make the bestiaries
