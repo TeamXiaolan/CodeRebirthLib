@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BepInEx.Configuration;
 using Dawn;
+using Dusk.Weights;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -34,6 +35,8 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
     [field: SerializeField]
     public List<NamespacedKeyWithAnimationCurve> InsideMoonCurveSpawnWeights { get; private set; } = new();
     [field: SerializeField]
+    public List<IntComparisonCurveConfigWeight> InsideRoutePriceCurveSpawnWeights { get; private set; } = new();
+    [field: SerializeField]
     public List<NamespacedKeyWithAnimationCurve> InsideInteriorCurveSpawnWeights { get; private set; } = new();
     [field: SerializeField]
     public bool InsidePrioritiseMoonConfig { get; private set; } = true;
@@ -49,6 +52,8 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
 
     [field: SerializeField]
     public List<NamespacedKeyWithAnimationCurve> OutsideMoonCurveSpawnWeights { get; private set; } = new();
+    [field: SerializeField]
+    public List<IntComparisonCurveConfigWeight> OutsideRoutePriceCurveSpawnWeights { get; private set; } = new();
     [field: SerializeField]
     public List<NamespacedKeyWithAnimationCurve> OutsideInteriorCurveSpawnWeights { get; private set; } = new();
     [field: SerializeField]
@@ -75,6 +80,8 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
                     () => Config.InsideInteriorCurveSpawnWeights?.Value ?? CurvesToConfigString(InsideInteriorCurveSpawnWeights),
                     () => Config.InsidePrioritiseMoon?.Value ?? InsidePrioritiseMoonConfig);
 
+                RoutePriceCurveWeightSource routePriceSource = new(() => IntComparisonCurveConfigWeight.ConvertManyFromString(Config.InsideRoutePriceCurveSpawnWeights?.Value ?? string.Empty));
+
                 builder.DefineInside(insideBuilder =>
                 {
                     insideBuilder.OverrideSpawnFacingWall(InsideMapObjectSettings.spawnFacingWall);
@@ -87,6 +94,7 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
                     insideBuilder.SetWeights(weightProfile =>
                     {
                         weightProfile.AddSource(insideSpawnMechanics);
+                        weightProfile.AddSource(routePriceSource);
                     });
                 });
             }
@@ -98,20 +106,22 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
                     () => Config.OutsideInteriorCurveSpawnWeights?.Value ?? CurvesToConfigString(OutsideInteriorCurveSpawnWeights),
                     () => Config.OutsidePrioritiseMoon?.Value ?? OutsidePrioritiseMoonConfig);
 
+                RoutePriceCurveWeightSource routePriceSource = new(() => IntComparisonCurveConfigWeight.ConvertManyFromString(Config.OutsideRoutePriceCurveSpawnWeights?.Value ?? string.Empty));
+
                 builder.DefineOutside(outsideBuilder =>
-                {
-                    outsideBuilder.OverrideAlignWithTerrain(OutsideMapObjectSettings.alignWithTerrain);
-                    outsideBuilder.OverrideMinimumNodeSpawnRequirement(OutsideMapObjectSettings.minimumAINodeSpawnRequirement);
-                    outsideBuilder.OverrideObjectWidth(OutsideMapObjectSettings.objectWidth);
-                    outsideBuilder.OverrideRotationOffset(OutsideMapObjectSettings.rotationOffset);
-                    outsideBuilder.OverrideSpawnFacingAwayFromWall(OutsideMapObjectSettings.spawnFacingAwayFromWall);
-                    outsideBuilder.OverrideSpawnableFloorTags(OutsideMapObjectSettings.spawnableFloorTags);
-                    outsideBuilder.OverrideDestroyTrees(OutsideMapObjectSettings.destroyTrees);
-                    outsideBuilder.SetWeights(weightProfile =>
-                    {
-                        weightProfile.AddSource(outsideSpawnMechanics);
-                    });
-                });
+                            {
+                                outsideBuilder.OverrideAlignWithTerrain(OutsideMapObjectSettings.alignWithTerrain);
+                                outsideBuilder.OverrideMinimumNodeSpawnRequirement(OutsideMapObjectSettings.minimumAINodeSpawnRequirement);
+                                outsideBuilder.OverrideObjectWidth(OutsideMapObjectSettings.objectWidth);
+                                outsideBuilder.OverrideRotationOffset(OutsideMapObjectSettings.rotationOffset);
+                                outsideBuilder.OverrideSpawnFacingAwayFromWall(OutsideMapObjectSettings.spawnFacingAwayFromWall);
+                                outsideBuilder.OverrideSpawnableFloorTags(OutsideMapObjectSettings.spawnableFloorTags);
+                                outsideBuilder.OverrideDestroyTrees(OutsideMapObjectSettings.destroyTrees);
+                                outsideBuilder.SetWeights(weightProfile =>
+                                {
+                                    weightProfile.AddSource(outsideSpawnMechanics);
+                                });
+                            });
             }
 
             ApplyTagsTo(builder);
