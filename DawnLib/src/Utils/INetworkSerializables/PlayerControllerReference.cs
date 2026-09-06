@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using GameNetcodeStuff;
 using Unity.Netcode;
 
@@ -43,6 +44,23 @@ public class PlayerControllerReference : INetworkSerializable, IEquatable<Player
     public static implicit operator bool(PlayerControllerReference reference)
     {
         return reference.IsValid;
+    }
+
+    public static implicit operator int(PlayerControllerReference reference)
+    {
+        return reference._playerID;
+    }
+
+    public bool TryGet([NotNullWhen(true)] out PlayerControllerB? player)
+    {
+        player = null;
+        if (_playerID == -1)
+        {
+            return false;
+        }
+
+        player = StartOfRound.Instance.allPlayerScripts[_playerID];
+        return true;
     }
 
     public override bool Equals(object? obj)
