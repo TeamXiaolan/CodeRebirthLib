@@ -20,7 +20,7 @@ public abstract class DuskContentDefinition : ScriptableObject
     [SerializeField, UnlockedNamespacedKey]
     internal List<NamespacedKey> _tags = new();
 
-    public DuskBaseConfig? BaseConfig { get; set; }
+    public object? BaseConfig { get; set; }
 
     public virtual void Register(DuskRegistrationContext registrationContext)
     {
@@ -29,6 +29,7 @@ public abstract class DuskContentDefinition : ScriptableObject
 
     public virtual void RegisterPost(DuskRegistrationContext registrationContext)
     {
+        DuskBaseConfig? BaseConfig = this.BaseConfig as DuskBaseConfig;
         using ConfigContext context = registrationContext.Mod.ConfigManager.CreateConfigSectionForBundleData(registrationContext.AssetBundleData);
         foreach (DuskDynamicConfig configDefinition in _configEntries)
         {
