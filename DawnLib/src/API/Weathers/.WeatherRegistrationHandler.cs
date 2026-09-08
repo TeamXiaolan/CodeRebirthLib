@@ -129,6 +129,11 @@ static class WeatherRegistrationHandler
 
     private static string ProvideDawnWeatherNames(RuntimeILReferenceBag.FastDelegateInvokers.Func<Enum, string> orig, Enum self)
     {
+        if (TimeOfDayRefs.Instance == null)
+        {
+            return orig(self);
+        }
+
         if (self.GetType() == typeof(LevelWeatherType))
         {
             int value = (int)(LevelWeatherType)self;

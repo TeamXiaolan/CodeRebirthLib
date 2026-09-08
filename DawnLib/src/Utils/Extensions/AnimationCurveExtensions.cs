@@ -4,7 +4,7 @@ namespace Dawn;
 
 public static class AnimationCurveExtensions
 {
-    public static void Multiply(this AnimationCurve curve, float multiplier)
+    public static AnimationCurve Multiplied(this AnimationCurve curve, float multiplier)
     {
         Keyframe[] keys = curve.keys;
         for (int i = 0; i < keys.Length; i++)
@@ -15,5 +15,28 @@ public static class AnimationCurveExtensions
             key.outTangent *= multiplier;
             keys[i] = key;
         }
+
+        return new AnimationCurve(keys)
+        {
+            preWrapMode = curve.preWrapMode,
+            postWrapMode = curve.postWrapMode
+        };
+    }
+
+    public static AnimationCurve Added(this AnimationCurve curve, float amount)
+    {
+        Keyframe[] keys = curve.keys;
+        for (int i = 0; i < keys.Length; i++)
+        {
+            Keyframe key = keys[i];
+            key.value += amount;
+            keys[i] = key;
+        }
+
+        return new AnimationCurve(keys)
+        {
+            preWrapMode = curve.preWrapMode,
+            postWrapMode = curve.postWrapMode
+        };
     }
 }

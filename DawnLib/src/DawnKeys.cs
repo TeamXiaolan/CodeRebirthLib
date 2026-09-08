@@ -29,6 +29,7 @@ public static partial class DawnKeys
     public static readonly NamespacedKey MoonBaseCurve = NamespacedKey.From(Namespace, "moon_base_curve");
     public static readonly NamespacedKey MoonIntWeight = NamespacedKey.From(Namespace, "moon_int_weight");
     public static readonly NamespacedKey CurveMultiplier = NamespacedKey.From(Namespace, "curve_multiplier");
+    public static readonly NamespacedKey CurveAddition = NamespacedKey.From(Namespace, "curve_addition");
 
     // Extras
     public static readonly NamespacedKey MoonSceneIntWeight = NamespacedKey.From(Namespace, "moon_scene_int_weight");

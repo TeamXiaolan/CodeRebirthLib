@@ -3,18 +3,18 @@ using UnityEngine;
 
 namespace Dawn;
 
-public sealed class CurveMultiplierModifier : IWeightModifier<AnimationCurve?>
+public sealed class CurveAdditionModifier : IWeightModifier<AnimationCurve?>
 {
-    private readonly Func<float> _getMultiplier;
+    private readonly Func<float> _getAddition;
     private readonly Func<WeightContext, bool>? _canApply;
 
-    public CurveMultiplierModifier(Func<float> getMultiplier, Func<WeightContext, bool>? canApply = null)
+    public CurveAdditionModifier(Func<float> getAddition, Func<WeightContext, bool>? canApply = null)
     {
-        _getMultiplier = getMultiplier;
+        _getAddition = getAddition;
         _canApply = canApply;
     }
 
-    public NamespacedKey Key => DawnKeys.CurveMultiplier;
+    public NamespacedKey Key => DawnKeys.CurveAddition;
 
     public WeightModifierPhase Phase => WeightModifierPhase.Final;
 
@@ -30,7 +30,7 @@ public sealed class CurveMultiplierModifier : IWeightModifier<AnimationCurve?>
         if (value == null)
             return;
 
-        float multiplier = _getMultiplier();
-        value = value.Multiplied(multiplier);
+        float addition = _getAddition();
+        value = value.Multiplied(addition);
     }
 }

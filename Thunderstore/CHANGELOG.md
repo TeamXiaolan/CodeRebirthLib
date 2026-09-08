@@ -1,4 +1,10 @@
-# v1.0.0-pre5
+# v1.0.0-pre6
+
+- Created `CurveAdditionModifier` for messing with curves similarly to `CurveMultiplierModifier`.
+- Added compat with WeatherTweaks.
+- Added more null checks to stuff added previous update.
+
+## v1.0.0-pre5
 
 - Added a way to edit the top right display of entity replacement items.
 - Added a way to replace/add to the tooltips of entity replacement items.

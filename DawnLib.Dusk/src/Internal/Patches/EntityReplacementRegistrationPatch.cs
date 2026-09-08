@@ -9,6 +9,7 @@ using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using UnityEngine;
 using OpCodes = Mono.Cecil.Cil.OpCodes;
+using GameNetcodeStuff;
 
 namespace Dusk.Internal;
 
@@ -175,7 +176,13 @@ static class EntityReplacementRegistrationPatch
         cursor.Index += 2;
         cursor.EmitDelegate((string oldName) =>
         {
-            if (GameNetworkManager.Instance.localPlayerController.currentlyHeldObjectServer.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? itemReplacementDefinition) && !string.IsNullOrEmpty(itemReplacementDefinition.DisplayName))
+            PlayerControllerB localPlayer = GameNetworkManager.Instance.localPlayerController;
+            if (localPlayer.currentlyHeldObjectServer == null)
+            {
+                return oldName;
+            }
+
+            if (localPlayer.currentlyHeldObjectServer.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? itemReplacementDefinition) && !string.IsNullOrEmpty(itemReplacementDefinition.DisplayName))
             {
                 return itemReplacementDefinition.DisplayName;
             }

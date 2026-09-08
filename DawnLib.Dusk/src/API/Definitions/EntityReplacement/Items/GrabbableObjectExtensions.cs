@@ -6,8 +6,14 @@ namespace Dusk;
 
 public static class GrabbableObjectExtensions
 {
-    public static bool TryGetGrabbableObjectReplacement(this GrabbableObject grabbableObject, [NotNullWhen(true)] out DuskItemReplacementDefinition? output)
+    public static bool TryGetGrabbableObjectReplacement(this GrabbableObject? grabbableObject, [NotNullWhen(true)] out DuskItemReplacementDefinition? output)
     {
+        output = null;
+        if (grabbableObject == null)
+        {
+            return false;
+        }
+
         output = ((ICurrentEntityReplacement)grabbableObject).CurrentEntityReplacement as DuskItemReplacementDefinition;
         return output != null;
     }
