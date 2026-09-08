@@ -1,4 +1,5 @@
 using System;
+using Dawn;
 using UnityEngine;
 
 namespace Dusk;
@@ -10,4 +11,19 @@ public class MaterialWithIndex
     public Material Material { get; private set; }
     [field: SerializeField]
     public int Index { get; private set; }
+}
+
+[Serializable]
+public class MaterialWithIndexListWithWeight : IWeighted
+{
+    [field: SerializeField]
+    public MaterialWithIndex[] Materials { get; private set; }
+
+    [field: SerializeField]
+    public int Weight { get; private set; }
+
+    public int GetWeight()
+    {
+        return Weight;
+    }
 }

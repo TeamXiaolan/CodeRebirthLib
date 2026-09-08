@@ -7,6 +7,9 @@ namespace Dusk;
 public class DuskItemReplacementDefinition : DuskEntityReplacementDefinition<GrabbableObject>
 {
     [field: SerializeField]
+    public string DisplayName { get; private set; }
+
+    [field: SerializeField]
     public bool IsConductiveMetal { get; private set; }
 
     [field: SerializeField]
@@ -35,6 +38,9 @@ public class DuskItemReplacementDefinition : DuskEntityReplacementDefinition<Gra
 
     [field: SerializeField]
     public Vector3 PositionOffset { get; private set; }
+
+    [field: SerializeField]
+    public string[] ToolTips { get; private set; }
 
     public override IEnumerator Apply(GrabbableObject ai, bool immediate = false)
     {

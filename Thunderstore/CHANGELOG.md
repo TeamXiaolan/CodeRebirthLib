@@ -1,4 +1,10 @@
-# v1.0.0-pre4
+# v1.0.0-pre5
+
+- Added a way to edit the top right display of entity replacement items.
+- Added a way to replace/add to the tooltips of entity replacement items.
+- Added `RandomizedMaterialsReplacement` to Actions for entity replacements.
+
+## v1.0.0-pre4
 
 - Fixed earth leviathan not being able to come out with DawnSurface stuff.
 - Changed IsLocalPlayer() back to being a method to avoid conflict with `NetworkBehaviour.IsLocalPlayer`.

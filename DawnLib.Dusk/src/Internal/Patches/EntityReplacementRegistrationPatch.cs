@@ -132,6 +132,10 @@ static class EntityReplacementRegistrationPatch
             DynamicallyReplaceItemProperties
         ));
 
+        IL.HUDManager.ChangeControlTipMultiple += ReplaceItemNameWithDisplayName;
+        IL.GrabbableObject.SetControlTipsForItem += DynamicallyReplaceItemProperties;
+        IL.ShotgunItem.SetControlTipsForItem += DynamicallyReplaceItemProperties;
+
         IL.GameNetcodeStuff.PlayerControllerB.GrabObjectClientRpc += DynamicallyReplaceItemProperties;
         IL.GameNetcodeStuff.PlayerControllerB.ScrollMouse_performed += DynamicallyReplaceItemProperties;
         IL.GameNetcodeStuff.PlayerControllerB.SwitchItemSlotsClientRpc += DynamicallyReplaceItemProperties;
@@ -150,6 +154,34 @@ static class EntityReplacementRegistrationPatch
         IL.StunGrenadeItem.FallWithCurve += DynamicallyReplaceItemProperties;
 
         DuskPlugin.Logger.LogInfo("Done 'DynamicallyReplaceAudioClips' patching!");
+    }
+
+    private static void ReplaceItemNameWithDisplayName(ILContext il)
+    {
+        ILCursor cursor = new ILCursor(il);
+        if (!cursor.TryGotoNext(
+            MoveType.Before,
+            il => il.MatchLdarg(3),
+            il => il.MatchLdfld<Item>(nameof(Item.itemName)),
+            il => il.MatchLdstr(out _),
+            il => il.MatchCall(out _),
+            il => il.MatchCallvirt(out _)
+        ))
+        {
+            DuskPlugin.Logger.LogWarning($"Failed to hook method {il.Method.Name}");
+            return;
+        }
+
+        cursor.Index += 2;
+        cursor.EmitDelegate((string oldName) =>
+        {
+            if (GameNetworkManager.Instance.localPlayerController.currentlyHeldObjectServer.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? itemReplacementDefinition) && !string.IsNullOrEmpty(itemReplacementDefinition.DisplayName))
+            {
+                return itemReplacementDefinition.DisplayName;
+            }
+
+            return oldName;
+        });
     }
 
     private static void SyncSkinsWithNewClient(On.StartOfRound.orig_OnClientConnect orig, StartOfRound self, ulong clientId)
@@ -202,12 +234,12 @@ static class EntityReplacementRegistrationPatch
     private static string ReplaceShipCollectText(List<GrabbableObject> grabbableObjects, int index)
     {
         GrabbableObject grabbableObject = grabbableObjects[index];
-        if (!grabbableObject.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? itemReplacementDefinition))
+        if (!grabbableObject.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? itemReplacementDefinition) || string.IsNullOrEmpty(itemReplacementDefinition.DisplayName))
         {
             return grabbableObject.itemProperties.itemName + " collected!";
         }
 
-        return itemReplacementDefinition.SkinName + " collected!";
+        return itemReplacementDefinition.DisplayName + " collected!";
     }
 
     private static void ReplaceNewlySpawnedItemWithSkin(List<GrabbableObject> grabbableObjects, int index, GameObject newlyCreatedGameObject)
@@ -295,7 +327,7 @@ static class EntityReplacementRegistrationPatch
                 c.Index += 2;
                 c.EmitDelegate<Func<GrabbableObject, float, float>>((self, existing) =>
                 {
-                    if (!self.TryGetGrabbableObjectReplacement(out var replacement))
+                    if (!self.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? replacement))
                     {
                         return existing;
                     }
@@ -312,11 +344,28 @@ static class EntityReplacementRegistrationPatch
                 c.Index += 2;
                 c.EmitDelegate<Func<GrabbableObject, int, int>>((self, existing) =>
                 {
-                    if (!self.TryGetGrabbableObjectReplacement(out var replacement))
+                    if (!self.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? replacement))
                     {
                         return existing;
                     }
                     return replacement.FloorYOffset;
+                });
+                continue;
+            }
+
+            if (c.Next.MatchLdfld<Item>(nameof(Item.toolTips)))
+            {
+                c.Index--;
+                c.Emit(OpCodes.Dup);
+
+                c.Index += 2;
+                c.EmitDelegate<Func<GrabbableObject, string[], string[]>>((self, existing) =>
+                {
+                    if (!self.TryGetGrabbableObjectReplacement(out DuskItemReplacementDefinition? replacement) || replacement.ToolTips == null)
+                    {
+                        return existing;
+                    }
+                    return replacement.ToolTips;
                 });
                 continue;
             }

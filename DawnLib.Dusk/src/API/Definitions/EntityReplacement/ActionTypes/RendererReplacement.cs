@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Dawn.Internal;
+using Dawn.Utils;
+using Dusk.Internal;
 using UnityEngine;
 
 namespace Dusk;
@@ -174,6 +177,45 @@ public class MaterialsReplacement : Hierarchy
 
         int got = sourceMaterials?.Length ?? 0;
         DuskPlugin.Logger.LogWarning($"TransferRenderer: Material count mismatch (got {got}, need {requiredCount}). Resized with fallback materials.");
+    }
+}
+
+[CreateAssetMenu(fileName = "New Randomized Material Replacement", menuName = $"Entity Replacements/Actions/Randomized Material Replacement")]
+public class RandomizedMaterialsReplacement : Hierarchy
+{
+    [field: SerializeField]
+    public List<MaterialWithIndexListWithWeight> RandomizedReplacementMaterials { get; private set; } = new();
+
+    public override IEnumerator Apply(Transform rootTransform, bool immediate = false)
+    {
+        if (!immediate)
+        {
+            yield return null;
+        }
+
+        if (EntityReplacementRegistrationPatch.itemReplacementRandom == null)
+        {
+            EntityReplacementRegistrationPatch.itemReplacementRandom = new System.Random(StartOfRound.Instance.randomMapSeed + 234780);
+        }
+        MaterialWithIndexListWithWeight randomizedReplacementMaterials = EntityReplacementRegistrationPatch.itemReplacementRandom.NextWeighted(RandomizedReplacementMaterials);
+        List<Renderer> renderers = GetComponentsWithHierarchyPaths<Renderer>(rootTransform);
+        foreach (Renderer renderer in renderers)
+        {
+            ReplaceMaterials(renderer, randomizedReplacementMaterials.Materials);
+        }
+    }
+
+    private void ReplaceMaterials(Renderer targetRenderer, MaterialWithIndex[] replacementMaterials)
+    {
+        Material[] existingMaterials = targetRenderer.sharedMaterials;
+        foreach (MaterialWithIndex materialWithIndex in replacementMaterials)
+        {
+            if (materialWithIndex != null && materialWithIndex.Index >= 0 && materialWithIndex.Index < existingMaterials.Length)
+            {
+                existingMaterials[materialWithIndex.Index] = materialWithIndex.Material;
+            }
+        }
+        targetRenderer.sharedMaterials = existingMaterials;
     }
 }
 
