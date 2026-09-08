@@ -1,6 +1,10 @@
 # v1.0.0-pre4
 
 - Fixed earth leviathan not being able to come out with DawnSurface stuff.
+- Changed IsLocalPlayer() back to being a method to avoid conflict with `NetworkBehaviour.IsLocalPlayer`.
+- Added RoutePriceCurveWeights to MapObjects.
+- Gave PlayerControllerReference a .TryGet.
+- Fixed DawnLib MapObjects not spawning properly.
 
 ## v1.0.0-pre3
 

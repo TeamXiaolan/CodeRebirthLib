@@ -186,7 +186,7 @@ static class WeatherRegistrationHandler
     private static void SyncWeathers(On.GameNetcodeStuff.PlayerControllerB.orig_ConnectClientToPlayerObject orig, GameNetcodeStuff.PlayerControllerB self)
     {
         orig(self);
-        if (NetworkManager.Singleton.IsServer || !self.IsLocalPlayer)
+        if (NetworkManager.Singleton.IsServer || !self.IsLocalPlayer())
         {
             return;
         }

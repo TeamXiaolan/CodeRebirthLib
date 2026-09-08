@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Dawn.Utils;
 using DunGen;
 using GameNetcodeStuff;
 using HarmonyLib;
@@ -124,7 +125,7 @@ static class MiscFixesPatch
         cursor.Emit(OpCodes.Ldloc, 0);
         cursor.EmitDelegate((PlayerControllerB playerControllerB, GrabbableObject grabbableObject) =>
         {
-            if (playerControllerB.IsLocalPlayer)
+            if (playerControllerB.IsLocalPlayer())
             {
                 StartOfRoundRefs.Instance.SendChangedWeightEvent();
             }
