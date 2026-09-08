@@ -25,11 +25,11 @@ static class WeatherRegistrationHandler
             On.TimeOfDay.Awake += RegisterDawnWeathers;
             LethalContent.Moons.AfterTaggingWithContext += _ => AddDawnWeathersToMoons();
             On.StartOfRound.Start += RegisterVanillaAndModdedWeathers;
+            IL.StartOfRound.SetPlanetsWeather += ModifyWeatherWeighting;
         }
 
         On.GameNetcodeStuff.PlayerControllerB.ConnectClientToPlayerObject += SyncWeathers;
         On.StartOfRound.SetPlanetsWeather += CancelIfNotFrozen;
-        IL.StartOfRound.SetPlanetsWeather += ModifyWeatherWeighting;
 
         DawnPlugin.Hooks.Add(new Hook(AccessTools.DeclaredMethod(typeof(Enum), nameof(Enum.ToString), Type.EmptyTypes), ProvideDawnWeatherNames));
     }

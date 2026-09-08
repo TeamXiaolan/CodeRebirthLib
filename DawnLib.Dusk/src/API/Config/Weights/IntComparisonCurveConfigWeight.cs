@@ -108,12 +108,12 @@ public class IntComparisonCurveConfigWeight
 
         Match match = Regex.Match(
             input.Trim(),
-            @"^(==|!=|<=|>=|<|>)(-?\d+)=([\+\-\*/])(-?\d*\.?\d+)$"
+            @"^(==|!=|<=|>=|<|>)(-?\d+)$"
         );
 
         if (!match.Success)
         {
-            DuskPlugin.Logger.LogWarning($"Invalid IntComparisonConfigWeight format: {input}");
+            DuskPlugin.Logger.LogWarning($"Invalid IntComparisonCurveConfigWeight format: {input}");
             return false;
         }
 

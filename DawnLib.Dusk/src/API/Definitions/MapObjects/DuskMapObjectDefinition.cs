@@ -80,7 +80,7 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
                     () => Config.InsideInteriorCurveSpawnWeights?.Value ?? CurvesToConfigString(InsideInteriorCurveSpawnWeights),
                     () => Config.InsidePrioritiseMoon?.Value ?? InsidePrioritiseMoonConfig);
 
-                RoutePriceCurveWeightSource routePriceSource = new(() => IntComparisonCurveConfigWeight.ConvertManyFromString(Config.InsideRoutePriceCurveSpawnWeights?.Value ?? string.Empty));
+                RoutePriceCurveWeightSource routePriceSource = new(() => IntComparisonCurveConfigWeight.ConvertManyFromString(Config.InsideRoutePriceCurveSpawnWeights?.Value ?? IntComparisonCurveConfigWeight.ConvertManyToString(InsideRoutePriceCurveSpawnWeights)));
 
                 builder.DefineInside(insideBuilder =>
                 {
@@ -106,7 +106,7 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
                     () => Config.OutsideInteriorCurveSpawnWeights?.Value ?? CurvesToConfigString(OutsideInteriorCurveSpawnWeights),
                     () => Config.OutsidePrioritiseMoon?.Value ?? OutsidePrioritiseMoonConfig);
 
-                RoutePriceCurveWeightSource routePriceSource = new(() => IntComparisonCurveConfigWeight.ConvertManyFromString(Config.OutsideRoutePriceCurveSpawnWeights?.Value ?? string.Empty));
+                RoutePriceCurveWeightSource routePriceSource = new(() => IntComparisonCurveConfigWeight.ConvertManyFromString(Config.OutsideRoutePriceCurveSpawnWeights?.Value ?? IntComparisonCurveConfigWeight.ConvertManyToString(OutsideRoutePriceCurveSpawnWeights)));
 
                 builder.DefineOutside(outsideBuilder =>
                             {
@@ -120,6 +120,7 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
                                 outsideBuilder.SetWeights(weightProfile =>
                                 {
                                     weightProfile.AddSource(outsideSpawnMechanics);
+                                    weightProfile.AddSource(routePriceSource);
                                 });
                             });
             }
@@ -133,7 +134,7 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
         MapObjectConfig mapObjectConfig = new(section, EntityNameReference);
 
         ConfigEntry<bool>? insideHazard = null, outsideHazard = null, insidePrioritiseMoon = null, outsidePrioritiseMoon = null;
-        ConfigEntry<string>? insideMoonCurves = null, insideInteriorCurves = null, outsideMoonCurves = null, outsideInteriorCurves = null;
+        ConfigEntry<string>? insideMoonCurves = null, insideInteriorCurves = null, insideRoutePriceCurves = null, outsideMoonCurves = null, outsideInteriorCurves = null, outsideRoutePriceCurves = null;
         if (CreateInsideHazardConfig)
         {
             insideHazard = section.Bind($"{EntityNameReference} | Is Inside Hazard", $"Whether {EntityNameReference} is an inside hazard", IsInsideHazard);
@@ -146,20 +147,24 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
 
         string insideMoonStringToUse = CurvesToConfigString(InsideMoonCurveSpawnWeights);
         string insideInteriorStringToUse = CurvesToConfigString(InsideInteriorCurveSpawnWeights);
+        string insideRoutePriceStringToUse = IntComparisonCurveConfigWeight.ConvertManyToString(InsideRoutePriceCurveSpawnWeights);
         if ((insideHazard?.Value ?? IsInsideHazard) && CreateInsideCurveSpawnWeightsConfig)
         {
             insidePrioritiseMoon = section.Bind($"{EntityNameReference} | Inside Spawn Prioritise Moon", $"Whether {EntityNameReference} should prioritise moon curves rather than interior curves when spawning inside.", InsidePrioritiseMoonConfig);
             insideMoonCurves = section.Bind($"{EntityNameReference} | Inside Moon Spawn Weights", $"Curve weights for {EntityNameReference} when spawning inside using Moon weights.", insideMoonStringToUse);
             insideInteriorCurves = section.Bind($"{EntityNameReference} | Inside Interior Spawn Weights", $"Curve weights for {EntityNameReference} when spawning inside using Interior weights.", insideInteriorStringToUse);
+            insideRoutePriceCurves = section.Bind($"{EntityNameReference} | Inside Route Price Spawn Weights", $"Curve weights for {EntityNameReference} when spawning inside using Route Price weights.", insideRoutePriceStringToUse);
         }
 
         string outsideMoonStringToUse = CurvesToConfigString(OutsideMoonCurveSpawnWeights);
         string outsideInteriorStringToUse = CurvesToConfigString(OutsideInteriorCurveSpawnWeights);
+        string outsideRoutePriceStringToUse = IntComparisonCurveConfigWeight.ConvertManyToString(OutsideRoutePriceCurveSpawnWeights);
         if ((outsideHazard?.Value ?? IsOutsideHazard) && CreateOutsideCurveSpawnWeightsConfig)
         {
             outsidePrioritiseMoon = section.Bind($"{EntityNameReference} | Outside Spawn Prioritise Moon", $"Whether {EntityNameReference} should prioritise moon curves rather than interior curves when spawning outside.", OutsidePrioritiseMoonConfig);
             outsideMoonCurves = section.Bind($"{EntityNameReference} | Outside Moon Spawn Weights", $"Curve weights for {EntityNameReference} when spawning outside using Moon weights.", outsideMoonStringToUse);
             outsideInteriorCurves = section.Bind($"{EntityNameReference} | Outside Interior Spawn Weights", $"Curve weights for {EntityNameReference} when spawning outside using Interior weights.", outsideInteriorStringToUse);
+            outsideRoutePriceCurves = section.Bind($"{EntityNameReference} | Outside Route Price Spawn Weights", $"Curve weights for {EntityNameReference} when spawning outside using Route Price weights.", outsideRoutePriceStringToUse);
         }
 
         mapObjectConfig.InsideHazard = insideHazard;
@@ -167,8 +172,10 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
 
         mapObjectConfig.InsideMoonCurveSpawnWeights = insideMoonCurves;
         mapObjectConfig.InsideInteriorCurveSpawnWeights = insideInteriorCurves;
+        mapObjectConfig.InsideRoutePriceCurveSpawnWeights = insideRoutePriceCurves;
         mapObjectConfig.OutsideMoonCurveSpawnWeights = outsideMoonCurves;
         mapObjectConfig.OutsideInteriorCurveSpawnWeights = outsideInteriorCurves;
+        mapObjectConfig.OutsideRoutePriceCurveSpawnWeights = outsideRoutePriceCurves;
 
         mapObjectConfig.InsidePrioritiseMoon = insidePrioritiseMoon;
         mapObjectConfig.OutsidePrioritiseMoon = outsidePrioritiseMoon;
@@ -180,8 +187,11 @@ public class DuskMapObjectDefinition : DuskContentDefinition<DawnMapObjectInfo>
 
             DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.InsideMoonCurveSpawnWeights, insideMoonStringToUse);
             DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.InsideInteriorCurveSpawnWeights, insideInteriorStringToUse);
+            DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.InsideRoutePriceCurveSpawnWeights, insideRoutePriceStringToUse);
+
             DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.OutsideMoonCurveSpawnWeights, outsideMoonStringToUse);
             DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.OutsideInteriorCurveSpawnWeights, outsideInteriorStringToUse);
+            DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.OutsideRoutePriceCurveSpawnWeights, outsideRoutePriceStringToUse);
 
             DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.InsidePrioritiseMoon, InsidePrioritiseMoonConfig);
             DuskBaseConfig.AssignValueIfNotNull(mapObjectConfig.OutsidePrioritiseMoon, OutsidePrioritiseMoonConfig);
