@@ -107,12 +107,10 @@ public abstract class AssetBundleLoader<TLoader> : IAssetBundleLoader where TLoa
     public DuskConfigRegistry Configs { get; } = new();
 
     [Obsolete("Use Configs.Get<T>() instead.")]
-    public ConfigEntry<T> GetConfig<T>(string configName)
-        => Configs.Get<T>(configName);
+    public ConfigEntry<T> GetConfig<T>(string configName) => Configs.Get<T>(configName);
 
     [Obsolete("Use Configs.TryGet<T>() instead.")]
-    public bool TryGetConfig<T>(string configName, [NotNullWhen(true)] out ConfigEntry<T>? entry)
-        => Configs.TryGet(configName, out entry);
+    public bool TryGetConfig<T>(string configName, [NotNullWhen(true)] out ConfigEntry<T>? entry) => Configs.TryGet(configName, out entry);
 
     internal void TryUnload()
     {

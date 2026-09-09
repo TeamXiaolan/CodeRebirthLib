@@ -182,24 +182,25 @@ static class DungeonRegistrationHandler
 
     private static void FixRandomMapObjects(RuntimeILReferenceBag.FastDelegateInvokers.Action<RandomMapObject> orig, RandomMapObject self)
     {
-        foreach (DawnMapObjectInfo mapObjectInfo in LethalContent.MapObjects.Values)
+        for (int i = 0; i < self.spawnablePrefabs.Count; i++)
         {
-            for (int i = 0; i < self.spawnablePrefabs.Count; i++)
+            GameObject? spawnablePrefab = self.spawnablePrefabs[i];
+            if (spawnablePrefab == null)
             {
-                if (self.spawnablePrefabs[i] == null)
-                {
-                    continue;
-                }
+                continue;
+            }
 
+            foreach (DawnMapObjectInfo mapObjectInfo in LethalContent.MapObjects.Values)
+            {
                 GameObject? mapObject = mapObjectInfo.GetMapObjectPrefab();
                 if (mapObject == null)
                 {
                     continue;
                 }
 
-                if (self.spawnablePrefabs[i].name.Equals(mapObject.name, StringComparison.OrdinalIgnoreCase))
+                if (spawnablePrefab.name.Equals(mapObject.name, StringComparison.OrdinalIgnoreCase))
                 {
-                    self.spawnablePrefabs[i] = mapObject;
+                    spawnablePrefab = mapObject;
                     break;
                 }
             }

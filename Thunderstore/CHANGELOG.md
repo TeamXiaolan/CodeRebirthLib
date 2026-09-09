@@ -1,4 +1,9 @@
-# v1.0.0-pre6
+# v1.0.0-pre7
+
+- Removed some fatal logging that was left on?
+- Implemented minor optimisation to `FixRandomMapObject` method.
+
+## v1.0.0-pre6
 
 - Created `CurveAdditionModifier` for messing with curves similarly to `CurveMultiplierModifier`.
 - Added compat with WeatherTweaks.
